@@ -25,7 +25,7 @@ public class Publisher extends JPanel implements Runnable {
 		this.topics = topics;
 		this.player = player;
 
-		GridModel.getInstance().set(player.x,player.y, GridCell.VISITED);
+		GridModel.getInstance().set(player.x,player.y, GridCell.PLAYER);
 	}
 	
 	@Override

@@ -42,7 +42,7 @@ public class WindowView extends JPanel implements PropertyChangeListener {
 
                 if(!player.equals(newPos)){
                     GridModel.getInstance().set(player.x, player.y, GridCell.EMPTY);
-                    GridModel.getInstance().set(newPos.x, newPos.y, GridCell.VISITED);
+                    GridModel.getInstance().set(newPos.x, newPos.y, GridCell.PLAYER);
                     pub.setPlayer(newPos);
                 }
 

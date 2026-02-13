@@ -27,12 +27,8 @@ public class GridCellView extends JPanel implements PropertyChangeListener {
     private void updateColor(GridCell cell) {
         switch(cell) {
             case EMPTY -> setBackground(Color.WHITE);
-            case START -> setBackground(Color.YELLOW);
-            case END -> setBackground(Color.PINK);
-            case OBSTACLE -> setBackground(Color.BLACK);
-            case PATH -> setBackground(Color.GREEN);
-            case FRONTIER -> setBackground(Color.CYAN);
-            case VISITED -> setBackground(Color.RED);
+            case OPPONENT -> setBackground(Color.CYAN);
+            case PLAYER -> setBackground(Color.RED);
         }
     }
 

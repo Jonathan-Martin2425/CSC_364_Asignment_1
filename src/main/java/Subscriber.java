@@ -3,6 +3,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import java.awt.*;
 
 /**
  * An MQTT client subscribing to topics.
@@ -11,15 +12,16 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  * @version 2.0
  */
 public class Subscriber implements Runnable, MqttCallback {
-	
+
 	private String broker;
 	private String[] topics;
-	
+	private Point position;
+
 	public Subscriber(String brokerUrl, String[] topics) {
 		this.broker = brokerUrl;
 		this.topics = topics;
 	}
-	
+
 	@Override
 	public void run() {
 		MqttClient client = null;
@@ -37,7 +39,7 @@ public class Subscriber implements Runnable, MqttCallback {
 			}
 			// 3. keep the client running to listen for messages
 			while (true) {
-				Thread.sleep(1000);
+				Thread.sleep(10);
 			}
 		} catch (MqttException e) {
 			System.out.println("📥 MQTT error: " + e.getMessage());
@@ -55,18 +57,35 @@ public class Subscriber implements Runnable, MqttCallback {
 			}
 		}
 	}
-	
+
 	@Override
 	public void connectionLost(Throwable cause) {
 		System.out.println("📥 Connection to broker lost: " + cause.getMessage());
 	}
-	
+
 	@Override
 	public void messageArrived(String topic, MqttMessage message) {
 		String payload = new String(message.getPayload());
-		System.out.println("📥 Delivery :: " + "[" + topic + " : " + message.getQos() + "] :: " + payload);
+		System.out.println(payload);
+
+		try {
+			GridModel model = GridModel.getInstance();
+
+			String[] split = payload.split(", ");
+			Point newpos = new Point(Integer.valueOf(split[0]), Integer.valueOf(split[1]));
+			System.out.println(newpos);
+
+			if (!newpos.equals(position)) {
+				if (position != null) {
+					model.set(position.x, position.y, GridCell.EMPTY);
+				}
+				model.set(newpos.x, newpos.y, GridCell.OPPONENT);
+				position = newpos;
+			}
+		}
+		catch (Exception e) {};
 	}
-	
+
 	@Override
 	public void deliveryComplete(IMqttDeliveryToken token) {
 		try {
@@ -75,5 +94,5 @@ public class Subscriber implements Runnable, MqttCallback {
 			System.out.println("📥 Delivery complete, but failed to get message ID.");
 		}
 	}
-	
+
 }
