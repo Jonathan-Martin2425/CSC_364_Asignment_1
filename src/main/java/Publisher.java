@@ -51,7 +51,7 @@ public class Publisher extends JPanel implements Runnable {
 							System.out.println("↗️ published to " + topic + ": " + message);
 						}
 					}
-					Thread.sleep(50);
+					Thread.sleep(10);
 				}
 			} catch (MqttException e) {
 				System.out.println("↗️ MQTT error: " + e.getMessage());

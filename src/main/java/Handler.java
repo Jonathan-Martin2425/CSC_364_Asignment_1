@@ -20,7 +20,7 @@ public class Handler extends JFrame {
 		// Start a subscriber thread
 		/* Subscriber subscriber = new Subscriber(BROKER_URL, TOPICS);
 		Thread threadSubscriber = new Thread(subscriber);
-		threadSubscriber.start();*/
+		threadSubscriber.start(); */
 		// Start a publisher thread
 		Publisher publisher = new Publisher(BROKER_URL, TOPICS, new Point(5,5));
 		Thread threadPublisher = new Thread(publisher);
