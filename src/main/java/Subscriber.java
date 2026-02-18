@@ -26,18 +26,11 @@ public class Subscriber implements Runnable, MqttCallback {
 		MqttClient client = null;
 		try {
 			// 1. generate a unique clientID and connect to broker
-			while (true){
-				String clientId = MqttClient.generateClientId();
-				client = new MqttClient(broker, clientId);
-				client.setCallback(this);
-				client.connect();
-				if (client.getClientId().equals(clientId)){
-					System.out.println("📥 Connected to self");
-				}else{
-					System.out.println("📥 Connected to broker: " + broker);
-					break;
-				}
-			}
+			String clientId = MqttClient.generateClientId();
+			client = new MqttClient(broker, clientId);
+			client.setCallback(this);
+			client.connect();
+			System.out.println("📥 Connected to broker: " + broker);
 			// 2. subscribe to only one of the topics with QoS=2
 			for (String topic : topics) {
 				client.subscribe(topic, 2);
@@ -79,6 +72,9 @@ public class Subscriber implements Runnable, MqttCallback {
 			Point position = world.getOther().pos;
 
 			String[] split = payload.split(", ");
+			if(split[2].equals("player1")){
+				return;
+			}
 			Point newpos = new Point(Integer.valueOf(split[0]), Integer.valueOf(split[1]));
 			System.out.println(newpos);
 
