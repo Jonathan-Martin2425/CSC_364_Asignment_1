@@ -18,30 +18,33 @@ public class Handler extends JFrame {
 	public static void main(String[] args) {
 
 		// Start a subscriber thread
-		/* Subscriber subscriber = new Subscriber(BROKER_URL, TOPICS);
+		Subscriber subscriber = new Subscriber(BROKER_URL, TOPICS);
 		Thread threadSubscriber = new Thread(subscriber);
-		threadSubscriber.start(); */
+		threadSubscriber.start();
 		// Start a publisher thread
-		Publisher publisher = new Publisher(BROKER_URL, TOPICS, new Point(5,5));
+		Publisher publisher = new Publisher(BROKER_URL, TOPICS);
 		Thread threadPublisher = new Thread(publisher);
 		threadPublisher.start();
 
-		Handler app = new Handler(publisher);
+		Handler app = new Handler();
 		app.setSize(800, 800);
 		app.setTitle("Concurrent Grid Pathfinder");
 		app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		app.setResizable(false);
 		app.setVisible(true);
+
+		WorldView.getInstance().repaintWorldView();
 	}
 
-	public Handler(Publisher pub){
-		JPanel windowView = new WindowView(pub);
+	public Handler(){
+		JPanel windowView = new WindowView();
 
 		JPanel top = new JPanel(new BorderLayout());
 		setLayout(new BorderLayout());
 
 		add(top, BorderLayout.NORTH);
 		add(windowView, BorderLayout.CENTER);
+		add(WorldView.getInstance(), BorderLayout.NORTH);
 	}
 	
 }

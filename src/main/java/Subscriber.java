@@ -15,7 +15,6 @@ public class Subscriber implements Runnable, MqttCallback {
 
 	private String broker;
 	private String[] topics;
-	private Point position;
 
 	public Subscriber(String brokerUrl, String[] topics) {
 		this.broker = brokerUrl;
@@ -27,11 +26,18 @@ public class Subscriber implements Runnable, MqttCallback {
 		MqttClient client = null;
 		try {
 			// 1. generate a unique clientID and connect to broker
-			String clientId = MqttClient.generateClientId();
-			client = new MqttClient(broker, clientId);
-			client.setCallback(this);
-			client.connect();
-			System.out.println("📥 Connected to broker: " + broker);
+			while (true){
+				String clientId = MqttClient.generateClientId();
+				client = new MqttClient(broker, clientId);
+				client.setCallback(this);
+				client.connect();
+				if (client.getClientId().equals(clientId)){
+					System.out.println("📥 Connected to self");
+				}else{
+					System.out.println("📥 Connected to broker: " + broker);
+					break;
+				}
+			}
 			// 2. subscribe to only one of the topics with QoS=2
 			for (String topic : topics) {
 				client.subscribe(topic, 2);
@@ -69,18 +75,15 @@ public class Subscriber implements Runnable, MqttCallback {
 		System.out.println(payload);
 
 		try {
-			GridModel model = GridModel.getInstance();
+			WorldView world = WorldView.getInstance();
+			Point position = world.getOther().pos;
 
 			String[] split = payload.split(", ");
 			Point newpos = new Point(Integer.valueOf(split[0]), Integer.valueOf(split[1]));
 			System.out.println(newpos);
 
 			if (!newpos.equals(position)) {
-				if (position != null) {
-					model.set(position.x, position.y, GridCell.EMPTY);
-				}
-				model.set(newpos.x, newpos.y, GridCell.OPPONENT);
-				position = newpos;
+				world.setOther(newpos);
 			}
 		}
 		catch (Exception e) {};

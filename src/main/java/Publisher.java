@@ -17,15 +17,10 @@ public class Publisher extends JPanel implements Runnable {
 	
 	private String broker;
 	private String[] topics;
-
-	private Point player;
 	
-	public Publisher(String brokerUrl, String[] topics, Point player) {
+	public Publisher(String brokerUrl, String[] topics) {
 		this.broker = brokerUrl;
 		this.topics = topics;
-		this.player = player;
-
-		GridModel.getInstance().set(player.x,player.y, GridCell.PLAYER);
 	}
 	
 	@Override
@@ -42,7 +37,9 @@ public class Publisher extends JPanel implements Runnable {
 				// keep sending current position data to subscibers
 				// every sleep period
 				while (true) {
-					String content = String.format("%d, %d", player.x, player.y);
+					// get player from worldView
+					Player player = WorldView.getInstance().getMe();
+					String content = String.format("%d, %d", player.pos.x, player.pos.y);
 					MqttMessage message = new MqttMessage(content.getBytes());
 					message.setQos(2);
 					if (client.isConnected()) {
@@ -70,13 +67,5 @@ public class Publisher extends JPanel implements Runnable {
 				}
 			}
 		}
-	}
-
-	public void setPlayer(Point p) {
-		this.player = p;
-	}
-
-	public Point getPlayer() {
-		return player;
 	}
 }
