@@ -52,9 +52,5 @@ public class GridCellView extends JPanel implements PropertyChangeListener {
         return new Dimension(25, 25); // square cell
     }
 
-    public static void resetClickCount() {
-        clickCount = 0;
-    }
-
 
 }

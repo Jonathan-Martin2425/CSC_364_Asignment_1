@@ -74,6 +74,8 @@ public class Subscriber implements Runnable, MqttCallback {
 			String[] split = payload.split(", ");
 			if(split[2].equals("player1")){
 				return;
+			}else{
+				System.out.println("continue");
 			}
 			Point newpos = new Point(Integer.valueOf(split[0]), Integer.valueOf(split[1]));
 			System.out.println(newpos);

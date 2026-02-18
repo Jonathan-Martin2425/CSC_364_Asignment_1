@@ -39,7 +39,7 @@ public class Publisher extends JPanel implements Runnable {
 				while (true) {
 					// get player from worldView
 					Player player = WorldView.getInstance().getMe();
-					String content = String.format("%d, %d %s", player.pos.x, player.pos.y, "player1");
+					String content = String.format("%d, %d, %s", player.pos.x, player.pos.y, "player1");
 					MqttMessage message = new MqttMessage(content.getBytes());
 					message.setQos(2);
 					if (client.isConnected()) {

@@ -31,8 +31,6 @@ public class WorldView extends JPanel implements PropertyChangeListener {
                     me.pos = newPos;
                     instance.repaintWorldView();
                 }
-
-                System.out.println("something");
             }
 
             @Override
@@ -55,8 +53,8 @@ public class WorldView extends JPanel implements PropertyChangeListener {
 
     public void repaintWorldView() {
         GridModel.getInstance().setSize(GridModel.getInstance().getSize());
-        GridModel.getInstance().set(me.pos.x, me.pos.y, me.color);
         GridModel.getInstance().set(other.pos.x, other.pos.y, other.color);
+        GridModel.getInstance().set(me.pos.x, me.pos.y, me.color);
     }
 
     public static WorldView getInstance(){
